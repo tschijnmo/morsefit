@@ -113,18 +113,3 @@ def read_configuration(file_name, cut_off):
 
 
 
-        conf.add_molecule(
-
-
-
-
-
-
-
-
-
-
-
-
-
-

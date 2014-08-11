@@ -42,7 +42,7 @@ def get_mp_base_idx(morse, elem_pair):
 
 
 
-def gen_rj_func_conf(confs, morse):
+def gen_rj_func(confs, morse):
 
     """Generate the residue and Jacobian function for a list of configurations
 
