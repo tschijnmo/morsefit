@@ -15,16 +15,16 @@ def morse_e(r, mp):
     """
 
     de, a, r0 = mp
-    return de * (
+    return de * ((
             exp(a * (r0 - r)) - 1
-            ) ** 2
+            ) ** 2 - 1.0)
 
 def morse_d_de(r, mp):
 
     """Compute the partial derivative of Morse energy wrt De"""
 
     de, a, r0 = mp
-    return ( exp(a * (r0 - r)) - 1 ) ** 2
+    return (( exp(a * (r0 - r)) - 1 ) ** 2 - 1.0)
 
 def morse_d_a(r, mp):
 

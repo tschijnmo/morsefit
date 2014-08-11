@@ -6,7 +6,7 @@ import argparse
 import numpy as np
 from scipy import optimize
 
-from .readinput import read_morse_inp, read_configuration
+from .inputread import read_morse_inp, read_configuration
 from .residue import gen_rj_func
 
 def main():
