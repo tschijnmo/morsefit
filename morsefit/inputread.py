@@ -9,18 +9,18 @@ def read_morse_inp(inp_file):
     
     """Reads the input file for the guesses of Morse potential
 
-    It parses the input file and returns a dictionary of the Morse potentials to
+    It parses the input file and returns a list of the Morse potentials to
     be fitted. The input file has got one line for each Morse potential to be
     fitted and skips the blank and lines started with the hash sign. For each
     Morse potential, the element signs of the two atoms needs to be given along
     with the initial guesses for the De, a, and r_0 parameters. 
 
-    The return value uses the sorted pair of the element symbol as the key and
-    the initial guess values as the value in the dictionary.
+    The returned list contains pairs of the sorted pair of the element symbol
+    and the initial guess values.
 
     """
 
-    morse_params = {}
+    morse_params = []
 
     for i_line in inp_file:
 
@@ -40,7 +40,8 @@ def read_morse_inp(inp_file):
             print "Incorrect format of numbers on the line: "
             print i_line
             sys.exit(1)
-        morse_params[elem] = init_guess
+        morse_params.append(
+                        (elem, init_guess) )
 
         continue
 
