@@ -3,5 +3,5 @@
 import morsefit
 
 if __name__ == '__main__':
-    morse_fit.main()
+    morsefit.main()
 

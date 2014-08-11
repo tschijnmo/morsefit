@@ -2,6 +2,8 @@
 
 import sys
 
+import numpy as np
+
 from .configuration import Configuration
 
 
@@ -91,7 +93,7 @@ def read_configuration(file_name, cut_off):
     for i_mol in sections[1:]:
         cur_mol = []
         for i_atm in i_mol:
-            fields = i_mol.split()
+            fields = i_atm.split()
             try:
                 symb = fields[0]
                 coord = np.array( [float(i) for i in fields[1:4] ] )

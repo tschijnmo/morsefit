@@ -30,12 +30,11 @@ def main():
                         help='The configuration files')
     args = parser.parse_args()
 
-    if args.cutoff != None:
-        try:
-            cut_off = float(args.cutoff)
-        except ValueError:
-            print "Invalid cut-off given!"
-            sys.exit(1)
+    try:
+        cut_off = float(args.cutoff) if args.cutoff != None else None
+    except ValueError:
+        print "Invalid cut-off %s given!" % args.cutoff
+        sys.exit(1)
 
     try:
         morse_file = open(args.guess)
@@ -44,7 +43,7 @@ def main():
         sys.exit(1)
 
     morse_guess = read_morse_inp(morse_file)
-    confs = [ read_configuration(i) for i in args.confs ]
+    confs = [ read_configuration(i, cut_off) for i in args.confs ]
 
     print "Configurations and the initial guess has been read..."
 
@@ -78,10 +77,10 @@ def main():
         print "Warning: Congences failed for the specified criteria!"
         print " Reason: %s" % mesg
 
-    ab_init_e = [ i.ab_init_e for i in confs ]
+    ab_initio_e = [ i.ab_initio_e for i in confs ]
     file_names = [ i.file_name for i in confs ]
     tags = [ i.tag for i in confs ]
-    morse_e = info_dict['fvec']
+    morse_e = np.array(ab_initio_e) + residue(res_param) 
     print " %20s %20s %25s %25s " %(
             "File Name", "tag", "Ab-initio", "Morse"
             )
@@ -91,11 +90,23 @@ def main():
     sys.stdout.write('\n')
 
     for i in zip(
-            file_names, tags, ab_init_e, morse_e
+            file_names, tags, ab_initio_e, morse_e
             ):
         print " %20s %20s %25.7f %25.7f " % i
         continue
     print "\n\n"
+
+    for i in xrange(0, 80):
+        sys.stdout.write("*")
+        continue
+    sys.stdout.write('\n')
+    for i, v in enumerate(morse_guess):
+        print " %5s %5s  %25.7f %25.7f %25.7f " % (
+                v[0][0], v[0][1],
+                res_param[i * 3], res_param[i * 3 + 1], res_param[i * 3 + 2]
+                )
+        continue
+    print "\n"
 
     return 0
 

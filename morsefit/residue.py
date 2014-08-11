@@ -28,7 +28,7 @@ def get_mp_base_idx(morse, elem_pair):
     """
 
     elem_pair_s = tuple(sorted(elem_pair))
-    idx_found = [ i for i, v in morse if v[0] == elem_pair_s ]
+    idx_found = [ i for i, v in enumerate(morse) if v[0] == elem_pair_s ]
 
     if len(idx_found) < 1:
         print "Morse potential guess for %s and %s is not given!" % elem_pair
@@ -59,7 +59,7 @@ def gen_rj_func(confs, morse):
     """
 
     # The vector of ab-initio energies
-    ab_init_e = np.array([i.ab_init_e for i in confs ])
+    ab_initio_e = np.array([i.ab_initio_e for i in confs ])
 
     # For each configuration, a list of (base index for Morse parameters,
     # distance) pairs for all the interactions that is accounted.
@@ -89,15 +89,15 @@ def gen_rj_func(confs, morse):
             # Use iterator
             res[i] = sum(
                     morse_e(i_term[1], mp[i_term[0]:(i_term[0] + 3)])
-                    for i_term in interactions_w_base_idx[i] ) - ab_init_e[i]
+                    for i_term in interactions_w_base_idx[i] ) - ab_initio_e[i]
             continue
         return res
 
     def jacobi(mp):
         res = np.empty((n, m), dtype = np.float64)
         # Column major iteration
-        for i_conf = xrange(0, m):
-            for i_pot = xrange(0, len(morse)):
+        for i_conf in xrange(0, m):
+            for i_pot in xrange(0, len(morse)):
                 dists = base_idx_w_dist[i_conf][i_pot]
                 cur_param = mp[i_pot * 3:(i_pot + 1) * 3]
                 partial_de = sum(morse_d_de(i_r, cur_param) for i_r in dists)
