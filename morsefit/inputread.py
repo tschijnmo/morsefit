@@ -40,8 +40,7 @@ def read_morse_inp(inp_file):
             print "Incorrect format of numbers on the line: "
             print i_line
             sys.exit(1)
-        morse_params.append(
-                        (elem, init_guess) )
+        morse_params.append( (elem, init_guess) )
 
         continue
 
@@ -83,6 +82,11 @@ def read_configuration(file_name, cut_off):
         print "Incorrect ab-initio energy in %s" % file_name
         sys.exit(1)
 
+    try:
+        tag = sections[0][1]
+    except IndexError:
+        tag = ''
+
     molecules = []
     for i_mol in sections[1:]:
         cur_mol = []
@@ -100,8 +104,7 @@ def read_configuration(file_name, cut_off):
         molecules.append(cur_mol)
         continue
 
-    conf = Configuration(file_name)
-    conf.ab_initio_e = ab_initio_e
+    conf = Configuration(file_name, tag, ab_initio_e)
     for i in molecules:
         conf.add_molecule(i)
         continue
@@ -111,5 +114,3 @@ def read_configuration(file_name, cut_off):
 
 
 
-
-

@@ -19,10 +19,14 @@ class Configuration(object):
       coordinates of atoms, given as a pair of element symbol and an numpy array
       for its Cartesian coordinate.
 
+    .. py:attribute:: file_name
+
+      The file name for the input file for this configuration.
+
     .. py:attribute:: tag
      
-      A tag for the configuration, which can be the file name of the
-      configuration file.
+      A tag for the configuration, which can be specified after the ab-initio
+      energy in the input file for the configuration.
 
     .. py:attribute:: ab_initio_e
 
@@ -41,24 +45,30 @@ class Configuration(object):
 
     __slots__ = [
             "molecules",
+            "file_name",
             "tag",
             "ab_initio_e",
             "cut_off",
             "interactions"
             ]
 
-    def __init__(self, tag):
+    def __init__(self, file_name, tag, ab_e):
 
         """Initializes the configuration object
 
-        It just initializes the tag, with the actual molecules have to be added
-        by :py:method:`add_molecule`.
+        It just initializes the basic properties like the file name, the tag,
+        and the ab-initio energy, with the actual molecules have to be added by
+        :py:method:`add_molecule`.
 
+        :param file_name: The file name for the input file of the configuration.
         :param tag: A string for a tag of the configuration.
+        :param ab_e: The ab-initio energy.
 
         """
 
+        self.file_name = file_name
         self.tag = tag
+        self.ab_initio_e = ab_e
         self.molecules = []
         self.cut_off = None
         self.interactions = []
@@ -86,10 +96,12 @@ class Configuration(object):
 
         :param cut_off: The cut-off for calculating the interactions. It can be
                         set to ``None`` to set no cut-off.
+        :return: The number of interactions that has been recognized.
+
 
         """
 
-        for mol1, mol2 in itertools.combinations(self.molecules):
+        for mol1, mol2 in itertools.combinations(self.molecules, 2):
             for atm1 in mol1:
                 for atm2 in mol2:
                     dist = linalg.norm(atm1[1] - atm2[1])
