@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+import morsefit
+
+if __name__ == '__main__':
+    morse_fit.main()
+

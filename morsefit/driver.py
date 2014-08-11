@@ -32,7 +32,7 @@ def main():
 
     if args.cutoff != None:
         try:
-            cutoff = float(args.cutoff)
+            cut_off = float(args.cutoff)
         except ValueError:
             print "Invalid cut-off given!"
             sys.exit(1)
@@ -98,15 +98,4 @@ def main():
     print "\n\n"
 
     return 0
-
-
-
-
-
-
-
-
-
-
-
 
