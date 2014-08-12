@@ -21,9 +21,11 @@ def main():
     """
 
     # parse the arguments
+    # -------------------
+
     parser = argparse.ArgumentParser(description='Fit the Morse potential')
     parser.add_argument('-c', '--cutoff', default=None, action='store',
-                        help='The distance cut-off')
+                        help='The distance cut-off, defalt to no cut-off')
     parser.add_argument('-g', '--guess', default='morse.inp', action='store',
                         help='The file for the Morse parameter guesses')
     parser.add_argument('confs', nargs='+',
@@ -42,34 +44,46 @@ def main():
         print "The file %s cannot be opened for the initial guess!" % args.guess
         sys.exit(1)
 
+    # Parse the input files
+    # ---------------------
+
     morse_guess = read_morse_inp(morse_file)
     confs = [ read_configuration(i, cut_off) for i in args.confs ]
 
     print "Configurations and the initial guess has been read..."
 
     # Generate the closures
+    # ---------------------
+
     residue, jacobi = gen_rj_func(confs, morse_guess)
     print "Closures for the residue and Jacobian generated..."
 
     # Perform the fit
+    # ---------------
+
+    # Generate the initial guess vector
     ig = np.empty(3 * len(morse_guess))
     for i in xrange(0, len(morse_guess)):
         for j in xrange(0, 3):
             ig[i * 3 + j] = morse_guess[i][1][j]
             continue
         continue
+    # The main loop
     print "Entering optimization main loop...\n"
     fit_result = optimize.leastsq(residue, ig, Dfun=jacobi, full_output=True,
                                     col_deriv=True)
     print "\nOptimization finished..."
 
     # Post processing
+    # ---------------
 
+    # Extract the relavant fields from the results.
     res_param = fit_result[0]
     info_dict = fit_result[2]
     mesg = fit_result[3]
     ier = fit_result[4]
 
+    # Convergence testing
     print " Number of function calls: %d" % info_dict['nfev']
     if ier in [1, 2, 3, 4]:
         print "Convergence achieved!"
@@ -77,6 +91,7 @@ def main():
         print "Warning: Congences failed for the specified criteria!"
         print " Reason: %s" % mesg
 
+    # Output the comparison of the fitted and Ab-initio energies.
     ab_initio_e = [ i.ab_initio_e for i in confs ]
     file_names = [ i.file_name for i in confs ]
     tags = [ i.tag for i in confs ]
@@ -92,16 +107,17 @@ def main():
     for i in zip(
             file_names, tags, ab_initio_e, morse_e
             ):
-        print " %20s %20s %25.7f %25.7f " % i
+        print " %20s %20s %25.10f %25.10f " % i
         continue
     print "\n\n"
 
+    # Write the fitted parameters
     for i in xrange(0, 80):
         sys.stdout.write("*")
         continue
     sys.stdout.write('\n')
     for i, v in enumerate(morse_guess):
-        print " %5s %5s  %25.7f %25.7f %25.7f " % (
+        print " %5s %5s  %25.10f %25.10f %25.10f " % (
                 v[0][0], v[0][1],
                 res_param[i * 3], res_param[i * 3 + 1], res_param[i * 3 + 2]
                 )

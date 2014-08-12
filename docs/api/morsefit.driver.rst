@@ -3,5 +3,5 @@ morsefit.driver module
 
 .. automodule:: morsefit.driver
     :members:
-    :undoc-members:
+    :special-members:
     :show-inheritance:

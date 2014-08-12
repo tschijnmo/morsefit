@@ -58,7 +58,7 @@ class Configuration(object):
 
         It just initializes the basic properties like the file name, the tag,
         and the ab-initio energy, with the actual molecules have to be added by
-        :py:method:`add_molecule`.
+        :py:meth:`add_molecule`.
 
         :param file_name: The file name for the input file of the configuration.
         :param tag: A string for a tag of the configuration.
@@ -91,7 +91,7 @@ class Configuration(object):
 
         .. warning::
 
-          This method has to be invoked after the :py:method:`add_molecule` has
+          This method has to be invoked after the :py:meth:`add_molecule` has
           been invoked for all the molecules in the system.
 
         :param cut_off: The cut-off for calculating the interactions. It can be
@@ -115,9 +115,4 @@ class Configuration(object):
         self.cut_off = cut_off
 
         return len(self.interactions)
-
-
-
-
-
 

@@ -3,5 +3,5 @@ morsefit.residue module
 
 .. automodule:: morsefit.residue
     :members:
-    :undoc-members:
+    :special-members:
     :show-inheritance:

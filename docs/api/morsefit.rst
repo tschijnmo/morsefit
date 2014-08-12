@@ -12,10 +12,3 @@ Submodules
    morsefit.morse
    morsefit.residue
 
-Module contents
----------------
-
-.. automodule:: morsefit
-    :members:
-    :undoc-members:
-    :show-inheritance:

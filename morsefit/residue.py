@@ -12,9 +12,10 @@ def get_mp_base_idx(morse, elem_pair):
 
     Since the Morse parameters for all the element pairs are stored in a big
     vector, we need to compute the base index for the Morse parameters for a
-    given element pair. The protocol is fairly simple, just the De, a, and r0
-    parameters of each pair in the Morse potential list are stored consecutively
-    in the same order as the list for the initial guess.
+    given element pair. The protocol is fairly simple, just the :math:`D_e`,
+    :math:`a`, and :math:`r_0` parameters of each pair in the Morse potential
+    list are stored consecutively in the same order as the list for the initial
+    guess.
 
     :param morse: The list of initial guesses for the Morse potential, as
         returned from the :py:func:`read_morse_inp` function.
@@ -46,12 +47,13 @@ def gen_rj_func(confs, morse):
 
     """Generate the residue and Jacobian function for a list of configurations
 
-    It returns two functions that is able to return the residue and the Jacobian
-    respectively when called with the grand vector of Morse parameters of the
-    protocol as defined in the function :py:func:`get_mp_base_idx`. For a N
-    parameter and M configuration problem, the residue function is going to
-    return a 1-D array of length M for the residues. For the Jacobian, the
-    return value is going to be an NxM matrix.
+    It returns two functions that is able to return the residue and the
+    Jacobian respectively when called with the grand vector of Morse parameters
+    of the protocol as defined in the function :py:func:`get_mp_base_idx`. For
+    a :math:`N` parameter and :math:`M` configuration problem, the residue
+    function is going to return a 1-D array of length M for the residues. For
+    the Jacobian, the return value is going to be an :math:`N\\times{}M`
+    matrix.
 
     :param confs: The list of configurations.
     :param morse: The list of initial guesses for the Morse potential.
@@ -68,6 +70,7 @@ def gen_rj_func(confs, morse):
                 (get_mp_base_idx(morse, i[0]), i[1]) 
                 for i in i_conf.interactions ]
             for i_conf in confs ]
+
     # For each configuration, a list of distances for each Morse parameters, in
     # the same order as given in the list ``morse``.
     base_idx_w_dist = [
@@ -76,8 +79,8 @@ def gen_rj_func(confs, morse):
                 for i_pot in xrange(0, len(morse)) ]
             for i_conf in interactions_w_base_idx ]
 
-    # n parameter, m residue, as the convention in the documentation of leastsq
-    # of scipy
+    # n parameter, m residue, the same as the convention in the documentation
+    # of leastsq of scipy
     n = 3 * len(morse)
     m = len(confs)
 
@@ -111,9 +114,4 @@ def gen_rj_func(confs, morse):
         return res
 
     return residue, jacobi
-
-
-                
-
-
 

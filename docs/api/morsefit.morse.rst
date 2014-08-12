@@ -3,5 +3,5 @@ morsefit.morse module
 
 .. automodule:: morsefit.morse
     :members:
-    :undoc-members:
+    :special-members:
     :show-inheritance:
