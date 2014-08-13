@@ -10,6 +10,6 @@ setup(
         author_email='tschijnmotschau@gmail.com',
         url='https://github.com/tschijnmo/morsefit',
         packages=['morsefit'],
-        scripts=['scripts/morsefit']
+        scripts=['scripts/morsefit', 'scripts/readPES']
         )
 

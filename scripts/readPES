@@ -1,0 +1,117 @@
+#!/usr/bin/env python
+
+import sys
+import json
+import glob
+import re
+
+import pybel
+
+
+def main():
+    """The main driver function for the script"""
+
+    # Parse the input
+    try:
+        with open(sys.argv[1], 'r') as input_file:
+            options = json.load(input_file)
+    except IndexError:
+        print "Input file not given! "
+        sys.exit(1)
+    except ValueError:
+        print "Corrupt input file %s !" % sys.argv[1]
+        sys.exit(1)
+
+    # get the list of input files
+    if 'input_globs' in options:
+        input_names = glob.glob(options['input_globs'])
+    else:
+        print 'input_globs field is mandatory in the input!'
+        sys.exit(1)
+
+    # read the configurations in by openBabel
+    input_format = options.get('input_format', 'g09')
+    confs = [ list(pybel.readfile(input_format, str(i_input)))[-1]
+            for i_input in input_names ]
+
+    # compute the interaction energies
+    if 'ref_energy' in options:
+        ref_energy = options['ref_energy']
+    else:
+        print 'ref_energy field is mandatory in the input!'
+        sys.exit(1)
+    # Energy should be in unit of eV
+    interaction_energies = [
+            i_conf.energy * 0.0433641 - ref_energy
+            for i_conf in confs ]
+
+    # get the tags
+    if 'tag_pattern' in options:
+        tag_names = [ re.sub(options['tag_pattern'], options['tag_repl'], 
+                      i_input) for i_input in input_names ]
+        tags = []
+        for i_tag in tag_names:
+            with open(i_tag, 'r') as i_tag_file:
+                tags.append(i_tag_file.readline().strip())
+            continue
+    else:
+        tags = [ '' for i in confs ]
+
+    # get the output file names
+    try:
+        output_pattern = options['output_pattern']
+        output_repl = options['output_repl']
+    except IndexError:
+        print 'output_pattern and output_repl are required!'
+        sys.exit(1)
+    output_names = [ re.sub(output_pattern, output_repl, i_input)
+                    for i_input in input_names ]
+
+    # get the indices of atoms in the molecules
+    natoms = len(confs[0].atoms)
+    if 'first_molecule_natoms' in options:
+        first_molecule_natoms = options['first_molecule_natoms']
+        last_molecule_natoms = natoms - first_molecule_natoms
+    elif 'last_molecule_natoms' in options:
+        last_molecule_natoms = options['last_molecule_natoms']
+        first_molecule_natoms = natoms - last_molecule_natoms
+    mol_idx = [
+                [ i for i in xrange(0, first_molecule_natoms) ],
+                [ i for i in xrange(first_molecule_natoms, natoms) ]
+              ]
+    
+    # write the output files
+    for i in xrange(0, len(confs)):
+        with open(output_names[i], 'w') as i_out:
+
+            print >> i_out, " %40.10f " % interaction_energies[i]
+            print >> i_out, " %s " % tags[i]
+            print >> i_out, ""
+
+            atoms = confs[i].atoms
+            if 'element_symbols' in options:
+                symbols = options['element_symbols']
+            else:
+                symbols = [ i_atm.type for i_atm in atoms ]
+            coords = [ i_atm.coords for i_atm in atoms ]
+
+            for i_mol in mol_idx:
+                mol_symbols = [ symbols[j] for j in i_mol ]
+                mol_coords = [ coords[j] for j in i_mol ]
+                for i_s, i_c in zip(mol_symbols, mol_coords):
+                    print >> i_out, " %s   %30.8f  %30.8f  %30.8f " % (
+                            i_s, i_c[0], i_c[1], i_c[2] )
+                    continue
+                print >> i_out, ""
+                continue
+
+        print " %s ==> %s " % (input_names[i], output_names[i])
+        continue
+
+    return 0
+
+
+
+if __name__ == '__main__':
+    main()
+
