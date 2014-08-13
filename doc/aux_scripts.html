@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Auxiliary scripts &mdash; morsefit 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="morsefit 0.1 documentation" href="index.html" />
+    <link rel="next" title="Automatic API documentation for development" href="api.html" />
+    <link rel="prev" title="Using the morsefit code" href="usage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api.html" title="Automatic API documentation for development"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Using the morsefit code"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">morsefit 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="auxiliary-scripts">
+<h1>Auxiliary scripts<a class="headerlink" href="#auxiliary-scripts" title="Permalink to this headline">¶</a></h1>
+<p>In order to make the process of converting the output from quantum mechanical
+codes to the input format required by the <tt class="docutils literal"><span class="pre">morsefit</span></tt> code without much
+difficulty, auxiliary scripts are written to facilitate the process. Currently
+just one <tt class="docutils literal"><span class="pre">readPES</span></tt> script has been finished, which is based on the openBabel
+<tt class="docutils literal"><span class="pre">pybel</span></tt> python interface and should be able to work with a lot of
+computational chemistry codes.</p>
+<div class="section" id="readpes">
+<h2>readPES<a class="headerlink" href="#readpes" title="Permalink to this headline">¶</a></h2>
+<p>Due to the large number of configurations that is needed for this script, the
+configurations are not taken from the command line arguments but rather from
+the file given as the first command line argument in JSON format. It is based
+on the openBabel program and should be able to support all the output format
+that is supported there. The options include:</p>
+<dl class="docutils">
+<dt>input_globs</dt>
+<dd>A glob string whose expansion is able to give all the input files.</dd>
+<dt>input_format</dt>
+<dd>The format of the input files, should be given in compatible with the
+supported format options of <a class="reference external" href="http://openbabel.org/docs/current/FileFormats/Overview.html#file-formats">openBabel</a>. Its default value is <tt class="docutils literal"><span class="pre">g09</span></tt> for
+Gaussian output files.</dd>
+<dt>ref_energy</dt>
+<dd>The reference energy which is going to be subtracted to get the interaction
+energy. It should be given in the unit of eV.</dd>
+<dt>output_pattern, output_repl</dt>
+<dd>The pattern to be matched against the input file names and the replacement
+to get the file name of the output file. It follows the conventions used in
+the built-in <tt class="docutils literal"><span class="pre">re.subs</span></tt> function in the regular expression module of
+python.</dd>
+<dt>tag_pattern, tag_repl</dt>
+<dd>The pattern and replacement to get the tag file for each input file. It can
+be absent to given blank tags.</dd>
+<dt>element_symbols</dt>
+<dd>A list of element symbols to substitute the ones in the input file. It
+should be given as a list or it can be absent to use the original symbols in
+the input file.</dd>
+<dt>first_molecule_natoms, last_molecule_natoms</dt>
+<dd>The number of molecules in the first or the last molecule. By this the
+system is going to be divided into two molecules. These two options are
+mutually exclusive. At lease one should be specified.</dd>
+</dl>
+<p>An example of the input file will be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s">&quot;input_globs&quot;</span><span class="p">:</span> <span class="s">&quot;../*/res/pyrene.out&quot;</span><span class="p">,</span>
+        <span class="s">&quot;ref_energy&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">17502.34385822885</span><span class="p">,</span>
+        <span class="s">&quot;output_pattern&quot;</span><span class="p">:</span> <span class="s">&quot;.*/(</span><span class="se">\\</span><span class="s">d*)/.*&quot;</span><span class="p">,</span>
+        <span class="s">&quot;output_repl&quot;</span><span class="p">:</span> <span class="s">&quot;conf-</span><span class="se">\\</span><span class="s">1&quot;</span><span class="p">,</span>
+        <span class="s">&quot;tag_pattern&quot;</span><span class="p">:</span> <span class="s">&quot;(.*)/res/pyrene.out&quot;</span><span class="p">,</span>
+        <span class="s">&quot;tag_repl&quot;</span><span class="p">:</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">1/len&quot;</span><span class="p">,</span>
+        <span class="s">&quot;last_molecule_natoms&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s">&quot;element_symbols&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;B1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;B1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;B1&quot;</span><span class="p">,</span>
+                <span class="s">&quot;B1&quot;</span><span class="p">,</span> <span class="s">&quot;B1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;B1&quot;</span><span class="p">,</span> <span class="s">&quot;B1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;B1&quot;</span><span class="p">,</span> <span class="s">&quot;H1&quot;</span><span class="p">,</span> <span class="s">&quot;N1&quot;</span><span class="p">,</span> <span class="s">&quot;N1&quot;</span><span class="p">,</span>
+                <span class="s">&quot;N1&quot;</span><span class="p">,</span> <span class="s">&quot;N1&quot;</span><span class="p">,</span> <span class="s">&quot;N1&quot;</span><span class="p">,</span> <span class="s">&quot;N1&quot;</span><span class="p">,</span> <span class="s">&quot;N1&quot;</span><span class="p">,</span> <span class="s">&quot;N1&quot;</span><span class="p">,</span> <span class="s">&quot;H99&quot;</span><span class="p">,</span> <span class="s">&quot;H99&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Auxiliary scripts</a><ul>
+<li><a class="reference internal" href="#readpes">readPES</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="previous chapter">Using the morsefit code</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">Automatic API documentation for development</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/aux_scripts.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api.html" title="Automatic API documentation for development"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Using the morsefit code"
+             >previous</a> |</li>
+        <li><a href="index.html">morsefit 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tschijnmo TSCHAU.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

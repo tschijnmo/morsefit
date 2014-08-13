@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>morsefit.driver &mdash; morsefit 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="morsefit 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">morsefit 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for morsefit.driver</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Defines the driver function for the fitter&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">optimize</span>
+
+<span class="kn">from</span> <span class="nn">.inputread</span> <span class="kn">import</span> <span class="n">read_morse_inp</span><span class="p">,</span> <span class="n">read_configuration</span>
+<span class="kn">from</span> <span class="nn">.residue</span> <span class="kn">import</span> <span class="n">gen_rj_func</span>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/morsefit.driver.html#morsefit.driver.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+    <span class="sd">&quot;&quot;&quot;The main driver function for the fitter</span>
+
+<span class="sd">    The cut-off is given as an optional command line argument, with the actual</span>
+<span class="sd">    files for the configurations given as positional arguments. The cut-off</span>
+<span class="sd">    defaults to no cut-off given, and the initial guesses for the Morse</span>
+<span class="sd">    potential parameters defaults to be in the file ``morse.inp``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># parse the arguments</span>
+    <span class="c"># -------------------</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s">&#39;Fit the Morse potential&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--cutoff&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;The distance cut-off, defalt to no cut-off&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-g&#39;</span><span class="p">,</span> <span class="s">&#39;--guess&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;morse.inp&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;The file for the Morse parameter guesses&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;confs&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;+&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;The configuration files&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cut_off</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">!=</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Invalid cut-off </span><span class="si">%s</span><span class="s"> given!&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="o">.</span><span class="n">cutoff</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">morse_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">guess</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;The file </span><span class="si">%s</span><span class="s"> cannot be opened for the initial guess!&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="o">.</span><span class="n">guess</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Parse the input files</span>
+    <span class="c"># ---------------------</span>
+
+    <span class="n">morse_guess</span> <span class="o">=</span> <span class="n">read_morse_inp</span><span class="p">(</span><span class="n">morse_file</span><span class="p">)</span>
+    <span class="n">confs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">read_configuration</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">cut_off</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">confs</span> <span class="p">]</span>
+
+    <span class="k">print</span> <span class="s">&quot;Configurations and the initial guess has been read...&quot;</span>
+
+    <span class="c"># Generate the closures</span>
+    <span class="c"># ---------------------</span>
+
+    <span class="n">residue</span><span class="p">,</span> <span class="n">jacobi</span> <span class="o">=</span> <span class="n">gen_rj_func</span><span class="p">(</span><span class="n">confs</span><span class="p">,</span> <span class="n">morse_guess</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;Closures for the residue and Jacobian generated...&quot;</span>
+
+    <span class="c"># Perform the fit</span>
+    <span class="c"># ---------------</span>
+
+    <span class="c"># Generate the initial guess vector</span>
+    <span class="n">ig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="n">ig</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">morse_guess</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">continue</span>
+        <span class="k">continue</span>
+    <span class="c"># The main loop</span>
+    <span class="k">print</span> <span class="s">&quot;Entering optimization main loop...</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">fit_result</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">leastsq</span><span class="p">(</span><span class="n">residue</span><span class="p">,</span> <span class="n">ig</span><span class="p">,</span> <span class="n">Dfun</span><span class="o">=</span><span class="n">jacobi</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                    <span class="n">col_deriv</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Optimization finished...&quot;</span>
+
+    <span class="c"># Post processing</span>
+    <span class="c"># ---------------</span>
+
+    <span class="c"># Extract the relavant fields from the results.</span>
+    <span class="n">res_param</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">info_dict</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">mesg</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">ier</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="c"># Convergence testing</span>
+    <span class="k">print</span> <span class="s">&quot; Number of function calls: </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">info_dict</span><span class="p">[</span><span class="s">&#39;nfev&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ier</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+        <span class="k">print</span> <span class="s">&quot;Convergence achieved!&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Warning: Congences failed for the specified criteria!&quot;</span>
+        <span class="k">print</span> <span class="s">&quot; Reason: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">mesg</span>
+
+    <span class="c"># Output the comparison of the fitted and Ab-initio energies.</span>
+    <span class="n">ab_initio_e</span> <span class="o">=</span> <span class="p">[</span> <span class="n">i</span><span class="o">.</span><span class="n">ab_initio_e</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">confs</span> <span class="p">]</span>
+    <span class="n">file_names</span> <span class="o">=</span> <span class="p">[</span> <span class="n">i</span><span class="o">.</span><span class="n">file_name</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">confs</span> <span class="p">]</span>
+    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span> <span class="n">i</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">confs</span> <span class="p">]</span>
+    <span class="n">morse_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ab_initio_e</span><span class="p">)</span> <span class="o">+</span> <span class="n">residue</span><span class="p">(</span><span class="n">res_param</span><span class="p">)</span> 
+    <span class="k">print</span> <span class="s">&quot; </span><span class="si">%20s</span><span class="s"> </span><span class="si">%20s</span><span class="s"> </span><span class="si">%25s</span><span class="s"> </span><span class="si">%25s</span><span class="s"> &quot;</span> <span class="o">%</span><span class="p">(</span>
+            <span class="s">&quot;File Name&quot;</span><span class="p">,</span> <span class="s">&quot;tag&quot;</span><span class="p">,</span> <span class="s">&quot;Ab-initio&quot;</span><span class="p">,</span> <span class="s">&quot;Morse&quot;</span>
+            <span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;*&#39;</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="n">file_names</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">ab_initio_e</span><span class="p">,</span> <span class="n">morse_e</span>
+            <span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot; </span><span class="si">%20s</span><span class="s"> </span><span class="si">%20s</span><span class="s"> </span><span class="si">%25.10f</span><span class="s"> </span><span class="si">%25.10f</span><span class="s"> &quot;</span> <span class="o">%</span> <span class="n">i</span>
+        <span class="k">continue</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span>
+
+    <span class="c"># Write the fitted parameters</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot; </span><span class="si">%5s</span><span class="s"> </span><span class="si">%5s</span><span class="s">  </span><span class="si">%25.10f</span><span class="s"> </span><span class="si">%25.10f</span><span class="s"> </span><span class="si">%25.10f</span><span class="s"> &quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span><span class="p">],</span> <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+
+    <span class="k">return</span> <span class="mi">0</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">morsefit 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tschijnmo TSCHAU.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

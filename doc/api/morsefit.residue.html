@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>morsefit.residue module &mdash; morsefit 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="morsefit 0.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">morsefit 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-morsefit.residue">
+<span id="morsefit-residue-module"></span><h1>morsefit.residue module<a class="headerlink" href="#module-morsefit.residue" title="Permalink to this headline">¶</a></h1>
+<p>Defines the residue and Jacobian function generators</p>
+<dl class="function">
+<dt id="morsefit.residue.gen_rj_func">
+<tt class="descclassname">morsefit.residue.</tt><tt class="descname">gen_rj_func</tt><big>(</big><em>confs</em>, <em>morse</em><big>)</big><a class="reference internal" href="../_modules/morsefit/residue.html#gen_rj_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morsefit.residue.gen_rj_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the residue and Jacobian function for a list of configurations</p>
+<p>It returns two functions that is able to return the residue and the
+Jacobian respectively when called with the grand vector of Morse parameters
+of the protocol as defined in the function <a class="reference internal" href="#morsefit.residue.get_mp_base_idx" title="morsefit.residue.get_mp_base_idx"><tt class="xref py py-func docutils literal"><span class="pre">get_mp_base_idx()</span></tt></a>. For
+a <span class="math">\(N\)</span> parameter and <span class="math">\(M\)</span> configuration problem, the residue
+function is going to return a 1-D array of length M for the residues. For
+the Jacobian, the return value is going to be an <span class="math">\(N\times{}M\)</span>
+matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>confs</strong> &#8211; The list of configurations.</li>
+<li><strong>morse</strong> &#8211; The list of initial guesses for the Morse potential.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="morsefit.residue.get_mp_base_idx">
+<tt class="descclassname">morsefit.residue.</tt><tt class="descname">get_mp_base_idx</tt><big>(</big><em>morse</em>, <em>elem_pair</em><big>)</big><a class="reference internal" href="../_modules/morsefit/residue.html#get_mp_base_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morsefit.residue.get_mp_base_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the base index for the Morse parameters for a given element pair</p>
+<p>Since the Morse parameters for all the element pairs are stored in a big
+vector, we need to compute the base index for the Morse parameters for a
+given element pair. The protocol is fairly simple, just the <span class="math">\(D_e\)</span>,
+<span class="math">\(a\)</span>, and <span class="math">\(r_0\)</span> parameters of each pair in the Morse potential
+list are stored consecutively in the same order as the list for the initial
+guess.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>morse</strong> &#8211; The list of initial guesses for the Morse potential, as
+returned from the <tt class="xref py py-func docutils literal"><span class="pre">read_morse_inp()</span></tt> function.</li>
+<li><strong>elem_pair</strong> &#8211; A pair of element symbols.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/morsefit.residue.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">morsefit 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tschijnmo TSCHAU.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

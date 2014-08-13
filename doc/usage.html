@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using the morsefit code &mdash; morsefit 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="morsefit 0.1 documentation" href="index.html" />
+    <link rel="next" title="Auxiliary scripts" href="aux_scripts.html" />
+    <link rel="prev" title="Welcome to morsefit’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aux_scripts.html" title="Auxiliary scripts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to morsefit’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">morsefit 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-the-morsefit-code">
+<h1>Using the morsefit code<a class="headerlink" href="#using-the-morsefit-code" title="Permalink to this headline">¶</a></h1>
+<p>The code can be invoked by the <tt class="docutils literal"><span class="pre">morsefit</span></tt> driver script. The configurations on
+which the fitting is based should be specified by the files whose names are
+given in the command line argument. One file for each configuration. The files
+have got a very simple format comprised of sections separated by blank lines.
+The first section gives the ab-initio energy, and an optional tag for the
+configuration can be given in the next line. Additional lines in the first
+section are going to be ignored. The following sections are going to be the
+Cartesian coordinates of the atoms in the molecules of the system. Only the
+interaction between molecules are going to be considered, with all the
+intra-molecular interactions ignored.</p>
+<p>The code also accepts optional arguments for the distance cut-off and the input
+file for the initial guesses of the Morse potentials. The cut-off defaults to
+<tt class="docutils literal"><span class="pre">None</span></tt>, which leads to no distance cut-off. And the default file name for the
+Morse potential parameter initial guess input is <tt class="docutils literal"><span class="pre">morse.inp</span></tt>. The file should
+consists of lines for the initial guesses for the Morse interaction between the
+atoms, with the first two fields being the atomic symbols for the interacting
+pairs and the remaining three fields being the <span class="math">\(D_e\)</span>, <span class="math">\(a\)</span>, and
+<span class="math">\(r_0\)</span> parameters for the Morse potential. All the interacting pairs in the
+configurations should be given here. And here the blank lines and lines starting
+with the hash sign are going to be skipped.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to morsefit&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aux_scripts.html"
+                        title="next chapter">Auxiliary scripts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/usage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aux_scripts.html" title="Auxiliary scripts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to morsefit’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">morsefit 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tschijnmo TSCHAU.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

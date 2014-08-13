@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>morsefit.inputread &mdash; morsefit 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="morsefit 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">morsefit 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for morsefit.inputread</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Defines the subroutines for reading the input files&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.configuration</span> <span class="kn">import</span> <span class="n">Configuration</span>
+
+
+<div class="viewcode-block" id="read_morse_inp"><a class="viewcode-back" href="../../api/morsefit.inputread.html#morsefit.inputread.read_morse_inp">[docs]</a><span class="k">def</span> <span class="nf">read_morse_inp</span><span class="p">(</span><span class="n">inp_file</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;Reads the input file for the guesses of Morse potential</span>
+
+<span class="sd">    It parses the input file and returns a list of the Morse potentials to be</span>
+<span class="sd">    fitted. The input file has got one line for each Morse potential to be</span>
+<span class="sd">    fitted and skips the blank and lines started with the hash sign. For each</span>
+<span class="sd">    Morse potential, the element symbols of the two atoms needs to be given</span>
+<span class="sd">    along with the initial guesses for the :math:`D_e`, :math:`a`, and</span>
+<span class="sd">    :math:`r_0` parameters. </span>
+
+<span class="sd">    The returned list contains pairs of the sorted pair of the element symbols</span>
+<span class="sd">    and the initial guess values for the three parameters.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">morse_params</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i_line</span> <span class="ow">in</span> <span class="n">inp_file</span><span class="p">:</span>
+
+        <span class="c"># Skip comments and blank lines</span>
+        <span class="n">line_stripped</span> <span class="o">=</span> <span class="n">i_line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line_stripped</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">line_stripped</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;#&#39;</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">line_stripped</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">elem</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">init_guess</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Incorrect number of fields on the line: &quot;</span>
+            <span class="k">print</span> <span class="n">i_line</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Incorrect format of numbers on the line: &quot;</span>
+            <span class="k">print</span> <span class="n">i_line</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">morse_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">init_guess</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="k">continue</span>
+
+    <span class="k">return</span> <span class="n">morse_params</span>
+
+
+
+</div>
+<div class="viewcode-block" id="read_configuration"><a class="viewcode-back" href="../../api/morsefit.inputread.html#morsefit.inputread.read_configuration">[docs]</a><span class="k">def</span> <span class="nf">read_configuration</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">cut_off</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Read the configuration from a file</span>
+
+<span class="sd">    :param file_name: The file name for the configuration file, which should be</span>
+<span class="sd">      a string that can be used in the :py:func:`open` function.</span>
+<span class="sd">    :param cut_off: The cut-off for the pairwise interactions.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Open the input file</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot; File </span><span class="si">%s</span><span class="s"> cannot be opened! &quot;</span> <span class="o">%</span> <span class="n">file_name</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Break the input lines into sections</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cur_section</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">stripped</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cur_section</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_section</span><span class="p">)</span>
+            <span class="n">cur_section</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">continue</span>
+    <span class="c"># corrects the one-off error if exists</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cur_section</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_section</span><span class="p">)</span>
+
+    <span class="c"># Read the ab-initio energy from the first section</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ab_initio_e</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sections</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Incorrect ab-initio energy in </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">file_name</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Get the optional tag</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="n">sections</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+    <span class="c"># Parse the atomic coordinates in the molecules</span>
+    <span class="n">molecules</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i_mol</span> <span class="ow">in</span> <span class="n">sections</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">cur_mol</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i_atm</span> <span class="ow">in</span> <span class="n">i_mol</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">i_atm</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">symb</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">coord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="p">]</span> <span class="p">)</span>
+                <span class="n">cur_mol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">symb</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span> <span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&quot;In file </span><span class="si">%s</span><span class="s">, corrupt line: &quot;</span> <span class="o">%</span> <span class="n">file_name</span>
+                <span class="k">print</span> <span class="n">i_atm</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">molecules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_mol</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="c"># Initialize the basic info in the Configuration object.</span>
+    <span class="n">conf</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">ab_initio_e</span><span class="p">)</span>
+    <span class="c"># Add the molecules.</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">molecules</span><span class="p">:</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">add_molecule</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="c"># Resolve the interactions based on the given cut-off.</span>
+    <span class="n">conf</span><span class="o">.</span><span class="n">calc_interactions</span><span class="p">(</span><span class="n">cut_off</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">conf</span>
+
+
+
+</div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">morsefit 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tschijnmo TSCHAU.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
