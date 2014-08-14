@@ -5,7 +5,7 @@ import json
 import glob
 import re
 
-import pybel
+import cclib.parser
 
 
 def main():
@@ -29,21 +29,39 @@ def main():
         print 'input_globs field is mandatory in the input!'
         sys.exit(1)
 
-    # read the configurations in by openBabel
-    input_format = options.get('input_format', 'g09')
-    confs = [ list(pybel.readfile(input_format, str(i_input)))[-1]
-            for i_input in input_names ]
+    # read the configurations in by cclib
+    if 'input_format' in options:
+        try:
+            parser = getattr(cclib.parser, options['input_format'])
+        except AttributeError:
+            print "Unsupported parser %s by cclib!" % options['input_format']
+    else:
+        parser = cclib.parser.ccopen
+    input_files = [ parser(str(i_input)) for i_input in input_names ]
+    confs = [ i.parse() for i in input_files ]
 
     # compute the interaction energies
+
+    # get the reference energy
     if 'ref_energy' in options:
         ref_energy = options['ref_energy']
     else:
         print 'ref_energy field is mandatory in the input!'
         sys.exit(1)
     # Energy should be in unit of eV
-    interaction_energies = [
-            i_conf.energy * 0.0433641 - ref_energy
-            for i_conf in confs ]
+    raw_energies = [ 0.0 for i in confs ]
+    for idx, i_conf in enumerate(confs):
+        if hasattr(i_conf, 'ccenergies'):
+            raw_energies[idx] = i_conf.ccenergies[-1]
+        elif hasattr(i_conf, 'mpenergies'):
+            raw_energies[idx] = i_conf.mpenergies[-1][-1]
+        elif hasattr(i_conf, 'scfenergies'):
+            raw_energies[idx] = i_conf.scfenergies[-1]
+        else:
+            print "Failed to load energies from the input file!"
+            sys.exit(1)
+        continue
+    interaction_energies = [ i - ref_energy for i in raw_energies ]
 
     # get the tags
     if 'tag_pattern' in options:
@@ -68,7 +86,7 @@ def main():
                     for i_input in input_names ]
 
     # get the indices of atoms in the molecules
-    natoms = len(confs[0].atoms)
+    natoms = len(confs[0].atomnos)
     if 'first_molecule_natoms' in options:
         first_molecule_natoms = options['first_molecule_natoms']
         last_molecule_natoms = natoms - first_molecule_natoms
@@ -88,12 +106,12 @@ def main():
             print >> i_out, " %s " % tags[i]
             print >> i_out, ""
 
-            atoms = confs[i].atoms
+            coords = confs[i].atomcoords[-1]
+            atomnos = confs[i].atomnos
             if 'element_symbols' in options:
                 symbols = options['element_symbols']
             else:
-                symbols = [ i_atm.type for i_atm in atoms ]
-            coords = [ i_atm.coords for i_atm in atoms ]
+                symbols = [ " %d " % i_atm for i_atm in atomnos ]
 
             for i_mol in mol_idx:
                 mol_symbols = [ symbols[j] for j in i_mol ]
