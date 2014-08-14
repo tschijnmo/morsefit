@@ -4,10 +4,35 @@ import sys
 import argparse
 
 import numpy as np
+from numpy import linalg
 from scipy import optimize
 
 from .inputread import read_morse_inp, read_configuration
 from .residue import gen_rj_func
+
+
+def write_param(morse_guess, res_param):
+
+    """Writes the fitted Morse parameters
+
+    :param morse_guess: The guess for the Morse potential, for the information
+      about the elements.
+    :param res_param: The result parameters, in the numpy array.
+
+    """
+
+    for i in xrange(0, 80):
+        sys.stdout.write("*")
+        continue
+    sys.stdout.write('\n')
+    for i, v in enumerate(morse_guess):
+        print " %5s %5s  %25.10f %25.10f %25.10f " % (
+                v[0][0], v[0][1],
+                res_param[i * 3], res_param[i * 3 + 1], res_param[i * 3 + 2]
+                )
+        continue
+    print "\n"
+
 
 def main():
 
@@ -28,6 +53,10 @@ def main():
                         help='The distance cut-off, defalt to no cut-off')
     parser.add_argument('-g', '--guess', default='morse.inp', action='store',
                         help='The file for the Morse parameter guesses')
+    parser.add_argument('-s', '--steps', default=50, action='store',
+                        type=int, help='The max number of steps in unit of 10000')
+    parser.add_argument('-f', '--factor', default=0.01, action='store',
+                        type=float, help='The scale factor for optimzation steps')
     parser.add_argument('confs', nargs='+',
                         help='The configuration files')
     args = parser.parse_args()
@@ -70,8 +99,21 @@ def main():
         continue
     # The main loop
     print "Entering optimization main loop...\n"
-    fit_result = optimize.leastsq(residue, ig, Dfun=jacobi, full_output=True,
-                                    col_deriv=True)
+    trunk_size = 10000
+    for step in xrange(0, args.steps):
+        fit_result = optimize.leastsq(residue, ig, Dfun=jacobi, full_output=True,
+                                     col_deriv=True, maxfev=trunk_size, 
+                                     factor=args.factor)
+        ig = fit_result[0]
+        print ""
+        print " Step %s: Residue = %f" % (
+                step * trunk_size,
+                linalg.norm(residue(ig)))
+        write_param(morse_guess, ig)
+        print "\n"
+        if fit_result[4] in [1, 2, 3, 4]:
+            break
+        continue
     print "\nOptimization finished..."
 
     # Post processing
@@ -111,18 +153,8 @@ def main():
         continue
     print "\n\n"
 
-    # Write the fitted parameters
-    for i in xrange(0, 80):
-        sys.stdout.write("*")
-        continue
-    sys.stdout.write('\n')
-    for i, v in enumerate(morse_guess):
-        print " %5s %5s  %25.10f %25.10f %25.10f " % (
-                v[0][0], v[0][1],
-                res_param[i * 3], res_param[i * 3 + 1], res_param[i * 3 + 2]
-                )
-        continue
-    print "\n"
+    # write the resulted parameters
+    write_param(morse_guess, res_param)
 
     return 0
 
