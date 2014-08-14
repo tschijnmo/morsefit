@@ -57,6 +57,8 @@ def main():
                         type=int, help='The max number of steps in unit of 10000')
     parser.add_argument('-f', '--factor', default=0.01, action='store',
                         type=float, help='The scale factor for optimzation steps')
+    parser.add_argument('-t', '--tolerance', default=1.0E-8, action='store',
+                        type=float, help='The tolerance for the solution.')
     parser.add_argument('confs', nargs='+',
                         help='The configuration files')
     args = parser.parse_args()
@@ -103,7 +105,7 @@ def main():
     for step in xrange(0, args.steps):
         fit_result = optimize.leastsq(residue, ig, Dfun=jacobi, full_output=True,
                                      col_deriv=True, maxfev=trunk_size, 
-                                     factor=args.factor)
+                                     factor=args.factor, ftol=args.tolerance)
         ig = fit_result[0]
         print ""
         print " Step %s: Residue = %f" % (
