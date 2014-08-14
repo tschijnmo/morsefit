@@ -4,9 +4,9 @@ Auxiliary scripts
 In order to make the process of converting the output from quantum mechanical
 codes to the input format required by the ``morsefit`` code without much
 difficulty, auxiliary scripts are written to facilitate the process. Currently
-just one ``readPES`` script has been finished, which is based on the openBabel
-``pybel`` python interface and should be able to work with a lot of
-computational chemistry codes.
+just one ``readPES`` script has been finished, which is based on the cclib_
+python library and should be able to work with a lot of computational chemistry
+codes.
 
 readPES
 ^^^^^^^
@@ -14,16 +14,16 @@ readPES
 Due to the large number of configurations that is needed for this script, the
 configurations are not taken from the command line arguments but rather from
 the file given as the first command line argument in JSON format. It is based
-on the openBabel program and should be able to support all the output format
-that is supported there. The options include:
+on the cclib library and should be able to support all the output format that
+is supported there. The options include:
 
 input_globs
     A glob string whose expansion is able to give all the input files.
 
 input_format
     The format of the input files, should be given in compatible with the
-    supported format options of openBabel_. Its default value is ``g09`` for
-    Gaussian output files.
+    supported format options of cclib_. Its default value is to use the default
+    format deduction of the ``ccopen`` function of cclib.
 
 ref_energy
     The reference energy which is going to be subtracted to get the interaction
@@ -66,5 +66,5 @@ An example of the input file will be:
                     "N1", "N1", "N1", "N1", "N1", "N1", "H99", "H99"] 
     }
 
-.. _openBabel: http://openbabel.org/docs/current/FileFormats/Overview.html#file-formats
+.. _cclib: http://cclib.github.io 
 
