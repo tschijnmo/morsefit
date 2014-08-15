@@ -54,7 +54,9 @@ def main():
     parser.add_argument('-g', '--guess', default='morse.inp', action='store',
                         help='The file for the Morse parameter guesses')
     parser.add_argument('-s', '--steps', default=50, action='store',
-                        type=int, help='The max number of steps in unit of 10000')
+                        type=int, help='The max number of steps of trunks')
+    parser.add_argument('-i', '--trunk-size', default=1000, action='store',
+                        type=int, help='The size of one trunk of steps')
     parser.add_argument('-f', '--factor', default=0.01, action='store',
                         type=float, help='The scale factor for optimzation steps')
     parser.add_argument('-d', '--diagonal', default=None, action='store',
@@ -107,7 +109,7 @@ def main():
         continue
 
     # set the options to the solveer
-    trunk_size = 10000
+    trunk_size = args.trunk_size
     opts = {
             'full_output': True,
             'maxfev': trunk_size,
