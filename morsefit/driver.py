@@ -57,8 +57,14 @@ def main():
                         type=int, help='The max number of steps in unit of 10000')
     parser.add_argument('-f', '--factor', default=0.01, action='store',
                         type=float, help='The scale factor for optimzation steps')
+    parser.add_argument('-d', '--diagonal', default=None, action='store',
+                        help='The diagonal scaling coefficient, can be a '
+                             'single positive number or a list')
     parser.add_argument('-t', '--tolerance', default=1.0E-8, action='store',
                         type=float, help='The tolerance for the solution.')
+    parser.add_argument('-j', '--no-jacobian', default=False, 
+                        action='store_true',
+                        help='Do not use analytic Jacobian')
     parser.add_argument('confs', nargs='+',
                         help='The configuration files')
     args = parser.parse_args()
@@ -99,13 +105,32 @@ def main():
             ig[i * 3 + j] = morse_guess[i][1][j]
             continue
         continue
+
+    # set the options to the solveer
+    trunk_size = 10000
+    opts = {
+            'full_output': True,
+            'maxfev': trunk_size,
+            'factor': args.factor,
+            'ftol': args.tolerance
+            }
+    if not args.no_jacobian:
+        opts['Dfun'] = jacobi
+        opts['col_deriv'] = True
+    if args.diagonal != None:
+        diag_input = eval(args.diagonal)
+        if isinstance(diag_input, float):
+            diag = [ diag_input for i in xrange(0, len(ig)) ]
+        else:
+            if len(diag_input) != len(ig):
+                print "Number of diag scaling factors are not correct."
+            diag = diag_input
+        opts['diag'] = diag
+
     # The main loop
     print "Entering optimization main loop...\n"
-    trunk_size = 10000
     for step in xrange(0, args.steps):
-        fit_result = optimize.leastsq(residue, ig, Dfun=jacobi, full_output=True,
-                                     col_deriv=True, maxfev=trunk_size, 
-                                     factor=args.factor, ftol=args.tolerance)
+        fit_result = optimize.leastsq(residue, ig, **opts)
         ig = fit_result[0]
         print ""
         print " Step %s: Residue = %f" % (
