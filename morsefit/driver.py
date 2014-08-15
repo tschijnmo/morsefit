@@ -8,7 +8,7 @@ from numpy import linalg
 from scipy import optimize
 
 from .inputread import read_morse_inp, read_configuration
-from .residue import gen_rj_func
+from .residue import gen_rj_func, PENALTY_FACTOR
 
 
 def write_param(morse_guess, res_param):
@@ -166,6 +166,8 @@ def main():
     ab_initio_e = [ i.ab_initio_e for i in confs ]
     file_names = [ i.file_name for i in confs ]
     tags = [ i.tag for i in confs ]
+    # turn-off penalty 
+    PENALTY_FACTOR = 0.0
     morse_e = np.array(ab_initio_e) + residue(res_param) 
     print " %20s %20s %25s %25s " %(
             "File Name", "tag", "Ab-initio", "Morse"
