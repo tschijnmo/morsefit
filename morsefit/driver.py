@@ -9,6 +9,7 @@ from scipy import optimize
 
 from .inputread import read_morse_inp, read_configuration
 from .residue import gen_rj_func
+from .leastsq2opt import conv_residue, conv_jacobi
 
 
 def write_param(morse_guess, res_param):
@@ -64,6 +65,9 @@ def main():
                              'single positive number or a list')
     parser.add_argument('-t', '--tolerance', default=1.0E-8, action='store',
                         type=float, help='The tolerance for the solution.')
+    parser.add_argument('-m', '--method', default='LMA', action='store',
+			help='The method for optimization, Levenberg-Marquardt by '
+			'default.' )
     parser.add_argument('-j', '--no-jacobian', default=False, 
                         action='store_true',
                         help='Do not use analytic Jacobian')
@@ -96,51 +100,88 @@ def main():
 
     residue, jacobi = gen_rj_func(confs, morse_guess)
     print "Closures for the residue and Jacobian generated..."
+    N = len(morse_guess) * 3
+    M = len(confs)
+    if args.method != 'LMA':
+	residue_gen = conv_residue(residue, N, M)
+	jacobi_gen = conv_jacobi(jacobi, residue, N, M)
 
     # Perform the fit
     # ---------------
 
-    # Generate the initial guess vector
+    # Generate the initial guess and bounds vector
     ig = np.empty(3 * len(morse_guess))
+    bounds = []
     for i in xrange(0, len(morse_guess)):
         for j in xrange(0, 3):
             ig[i * 3 + j] = morse_guess[i][1][j]
+	    bounds.append(
+		    (morse_guess[i][2][j * 2], morse_guess[i][2][j * 2 + 1] )
+		    )
             continue
         continue
 
     # set the options to the solveer
     trunk_size = args.trunk_size
-    opts = {
-            'full_output': True,
-            'maxfev': trunk_size,
-            'factor': args.factor,
-            'ftol': args.tolerance
-            }
-    if not args.no_jacobian:
-        opts['Dfun'] = jacobi
-        opts['col_deriv'] = True
-    if args.diagonal != None:
-        diag_input = eval(args.diagonal)
-        if isinstance(diag_input, float):
-            diag = [ diag_input for i in xrange(0, len(ig)) ]
-        else:
-            if len(diag_input) != len(ig):
-                print "Number of diag scaling factors are not correct."
-            diag = diag_input
-        opts['diag'] = diag
+
+    if args.method == 'LMA':
+
+	opts = {
+		'full_output': True,
+		'maxfev': trunk_size,
+		'factor': args.factor,
+		'ftol': args.tolerance
+		}
+	if not args.no_jacobian:
+	    opts['Dfun'] = jacobi
+	    opts['col_deriv'] = True
+	if args.diagonal != None:
+	    diag_input = eval(args.diagonal)
+	    if isinstance(diag_input, float):
+		diag = [ diag_input for i in xrange(0, len(ig)) ]
+	    else:
+		if len(diag_input) != len(ig):
+		    print "Number of diag scaling factors are not correct."
+		diag = diag_input
+	    opts['diag'] = diag
+
+    else:
+
+	opts = {
+		'method': args.method,
+		'tol': args.tolerance,
+		'options': {
+		    'maxiter': trunk_size,
+		    'disp': True
+		    }
+		}
+	if bounds != (None, ) * N:
+	    opts['bounds'] = bounds
+	if not args.no_jacobian:
+	    opts['jac'] = jacobi_gen
+	
 
     # The main loop
     print "Entering optimization main loop...\n"
     for step in xrange(0, args.steps):
-        fit_result = optimize.leastsq(residue, ig, **opts)
-        ig = fit_result[0]
+
+	if args.method == 'LMA':
+	    fit_result = optimize.leastsq(residue, ig, **opts)
+	    ig = fit_result[0]
+	    succ = fit_result[4] in [1, 2, 3, 4]
+	else:
+	    fit_result = optimize.minimize(residue_gen, ig, **opts)
+	    ig = fit_result.x
+	    succ = fit_result.success
+
         print ""
         print " Step %s: Residue = %f" % (
-                step * trunk_size,
-                linalg.norm(residue(ig)))
+                (step + 1) * trunk_size,
+                linalg.norm(residue(ig))
+		)
         write_param(morse_guess, ig)
         print "\n"
-        if fit_result[4] in [1, 2, 3, 4]:
+        if succ
             break
         continue
     print "\nOptimization finished..."
@@ -148,15 +189,11 @@ def main():
     # Post processing
     # ---------------
 
-    # Extract the relavant fields from the results.
-    res_param = fit_result[0]
-    info_dict = fit_result[2]
-    mesg = fit_result[3]
-    ier = fit_result[4]
-
-    # Convergence testing
-    print " Number of function calls: %d" % info_dict['nfev']
-    if ier in [1, 2, 3, 4]:
+    mesg = fit_result[3] if args.method == 'LMA' else fit_result.message
+    nfev = info_dict['nfev'] if args.method == 'LMA' else fit_result.nfev
+    # Convergence information
+    print " Number of function calls: %d" % nfev
+    if succ:
         print "Convergence achieved!"
     else:
         print "Warning: Congences failed for the specified criteria!"

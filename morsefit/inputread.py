@@ -44,7 +44,21 @@ def read_morse_inp(inp_file):
             print "Incorrect format of numbers on the line: "
             print i_line
             sys.exit(1)
-        morse_params.append( (elem, init_guess) )
+	try:
+	    bounds = tuple(eval(i) for i in fields[5:11])
+	    for i in bounds:
+		if not (isinstance(i, float) or i == None):
+		    print "The bounds have to be float or None!"
+		    sys.exit(1)
+		continue
+	except ValueError:
+	    print "Corrupt line:"
+	    print i_line
+	    sys.exit(1)
+	except IndexError:
+	    bounds = [ None for i in xrange(0, 6) ]
+
+        morse_params.append( (elem, init_guess, bounds) )
 
         continue
 

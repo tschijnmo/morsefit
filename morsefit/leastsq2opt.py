@@ -32,29 +32,29 @@ def conv_residue(residue_closure, N, M):
     return norm_sq_closure
 
 
-def conv_jacobian(jacobian_closure, residue_closure, N, M):
+def conv_jacobi(jacobi_closure, residue_closure, N, M):
 
     """Converts a Jacobian closure into the Jacobian for minimize
 
-    :param func jacobian_closure: The closure for computing the Jacobian matrix.
+    :param func jacobi_closure: The closure for computing the Jacobian matrix.
     :param func residue_closure: The closure for computing the residue vector.
     :param int N: The number of parameters
     :param int M: The number of residues
 
     """
 
-    def jacobian(param):
+    def jacobi_new(param):
         residue = residue_closure(param)
-        jacobian = jacobian_closure(param)
+        jacobi = jacobi_closure(param)
         result = np.empty(N, dtype=np.float64)
         for i in xrange(0, N):
             result[i] = sum(
-                    2 * residue[j] * jacobian[i][j] for j in xrange(0, M)
+                    2 * residue[j] * jacobi[i][j] for j in xrange(0, M)
                     )
             continue
         return result
 
-    return jacobian
+    return jacobi_new
 
 
 
