@@ -1,51 +1,101 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>morsefit.driver &mdash; morsefit 0.1 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="morsefit 0.1 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">morsefit 0.1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
-    </div>  
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morsefit.driver &mdash; morsefit 0.1 documentation</title>
+  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="morsefit 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> morsefit</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Using the morsefit code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../aux_scripts.html">Auxiliary scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../aux_scripts.html#readpes">readPES</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Automatic API documentation for development</a></li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">morsefit</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>morsefit.driver</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
             
   <h1>Source code for morsefit.driver</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;Defines the driver function for the fitter&quot;&quot;&quot;</span>
@@ -54,11 +104,37 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linalg</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">optimize</span>
 
 <span class="kn">from</span> <span class="nn">.inputread</span> <span class="kn">import</span> <span class="n">read_morse_inp</span><span class="p">,</span> <span class="n">read_configuration</span>
 <span class="kn">from</span> <span class="nn">.residue</span> <span class="kn">import</span> <span class="n">gen_rj_func</span>
+<span class="kn">from</span> <span class="nn">.leastsq2opt</span> <span class="kn">import</span> <span class="n">conv_residue</span><span class="p">,</span> <span class="n">conv_jacobi</span>
 
+
+<div class="viewcode-block" id="write_param"><a class="viewcode-back" href="../../api/morsefit.driver.html#morsefit.driver.write_param">[docs]</a><span class="k">def</span> <span class="nf">write_param</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">,</span> <span class="n">res_param</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Writes the fitted Morse parameters</span>
+
+<span class="sd">    :param morse_guess: The guess for the Morse potential, for the information</span>
+<span class="sd">      about the elements.</span>
+<span class="sd">    :param res_param: The result parameters, in the numpy array.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot; </span><span class="si">%5s</span><span class="s"> </span><span class="si">%5s</span><span class="s">  </span><span class="si">%25.10f</span><span class="s"> </span><span class="si">%25.10f</span><span class="s"> </span><span class="si">%25.10f</span><span class="s"> &quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span><span class="p">],</span> <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+
+</div>
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/morsefit.driver.html#morsefit.driver.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 
     <span class="sd">&quot;&quot;&quot;The main driver function for the fitter</span>
@@ -78,6 +154,23 @@
                         <span class="n">help</span><span class="o">=</span><span class="s">&#39;The distance cut-off, defalt to no cut-off&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-g&#39;</span><span class="p">,</span> <span class="s">&#39;--guess&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;morse.inp&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s">&#39;The file for the Morse parameter guesses&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-s&#39;</span><span class="p">,</span> <span class="s">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&#39;The max number of steps of trunks&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-i&#39;</span><span class="p">,</span> <span class="s">&#39;--trunk-size&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&#39;The size of one trunk of steps&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-f&#39;</span><span class="p">,</span> <span class="s">&#39;--factor&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&#39;The scale factor for optimzation steps&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="s">&#39;--diagonal&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;The diagonal scaling coefficient, can be a &#39;</span>
+                             <span class="s">&#39;single positive number or a list&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-t&#39;</span><span class="p">,</span> <span class="s">&#39;--tolerance&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1.0E-8</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&#39;The tolerance for the solution.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span> <span class="s">&#39;--method&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;LMA&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+			<span class="n">help</span><span class="o">=</span><span class="s">&#39;The method for optimization, Levenberg-Marquardt by &#39;</span>
+			<span class="s">&#39;default.&#39;</span> <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-j&#39;</span><span class="p">,</span> <span class="s">&#39;--no-jacobian&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
+                        <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;Do not use analytic Jacobian&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;confs&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;+&#39;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s">&#39;The configuration files&#39;</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
@@ -107,35 +200,102 @@
 
     <span class="n">residue</span><span class="p">,</span> <span class="n">jacobi</span> <span class="o">=</span> <span class="n">gen_rj_func</span><span class="p">(</span><span class="n">confs</span><span class="p">,</span> <span class="n">morse_guess</span><span class="p">)</span>
     <span class="k">print</span> <span class="s">&quot;Closures for the residue and Jacobian generated...&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">confs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">method</span> <span class="o">!=</span> <span class="s">&#39;LMA&#39;</span><span class="p">:</span>
+	<span class="n">residue_gen</span> <span class="o">=</span> <span class="n">conv_residue</span><span class="p">(</span><span class="n">residue</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
+	<span class="n">jacobi_gen</span> <span class="o">=</span> <span class="n">conv_jacobi</span><span class="p">(</span><span class="n">jacobi</span><span class="p">,</span> <span class="n">residue</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
 
     <span class="c"># Perform the fit</span>
     <span class="c"># ---------------</span>
 
-    <span class="c"># Generate the initial guess vector</span>
+    <span class="c"># Generate the initial guess and bounds vector</span>
     <span class="n">ig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">))</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">)):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
             <span class="n">ig</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">morse_guess</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+	    <span class="n">bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+		    <span class="p">(</span><span class="n">morse_guess</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span><span class="p">],</span> <span class="n">morse_guess</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+		    <span class="p">)</span>
             <span class="k">continue</span>
         <span class="k">continue</span>
+
+    <span class="c"># set the options to the solveer</span>
+    <span class="n">trunk_size</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">trunk_size</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;LMA&#39;</span><span class="p">:</span>
+
+	<span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s">&#39;full_output&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+		<span class="s">&#39;maxfev&#39;</span><span class="p">:</span> <span class="n">trunk_size</span><span class="p">,</span>
+		<span class="s">&#39;factor&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">factor</span><span class="p">,</span>
+		<span class="s">&#39;ftol&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">tolerance</span>
+		<span class="p">}</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_jacobian</span><span class="p">:</span>
+	    <span class="n">opts</span><span class="p">[</span><span class="s">&#39;Dfun&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jacobi</span>
+	    <span class="n">opts</span><span class="p">[</span><span class="s">&#39;col_deriv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+	<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">diagonal</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+	    <span class="n">diag_input</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">diagonal</span><span class="p">)</span>
+	    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diag_input</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+		<span class="n">diag</span> <span class="o">=</span> <span class="p">[</span> <span class="n">diag_input</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ig</span><span class="p">))</span> <span class="p">]</span>
+	    <span class="k">else</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">diag_input</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ig</span><span class="p">):</span>
+		    <span class="k">print</span> <span class="s">&quot;Number of diag scaling factors are not correct.&quot;</span>
+		<span class="n">diag</span> <span class="o">=</span> <span class="n">diag_input</span>
+	    <span class="n">opts</span><span class="p">[</span><span class="s">&#39;diag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diag</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+	<span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s">&#39;method&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+		<span class="s">&#39;tol&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">tolerance</span><span class="p">,</span>
+		<span class="s">&#39;options&#39;</span><span class="p">:</span> <span class="p">{</span>
+		    <span class="s">&#39;maxiter&#39;</span><span class="p">:</span> <span class="n">trunk_size</span><span class="p">,</span>
+		    <span class="s">&#39;disp&#39;</span><span class="p">:</span> <span class="bp">True</span>
+		    <span class="p">}</span>
+		<span class="p">}</span>
+	<span class="k">if</span> <span class="n">bounds</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">)</span> <span class="o">*</span> <span class="n">N</span><span class="p">:</span>
+	    <span class="n">opts</span><span class="p">[</span><span class="s">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_jacobian</span><span class="p">:</span>
+	    <span class="n">opts</span><span class="p">[</span><span class="s">&#39;jac&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jacobi_gen</span>
+	
+
     <span class="c"># The main loop</span>
     <span class="k">print</span> <span class="s">&quot;Entering optimization main loop...</span><span class="se">\n</span><span class="s">&quot;</span>
-    <span class="n">fit_result</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">leastsq</span><span class="p">(</span><span class="n">residue</span><span class="p">,</span> <span class="n">ig</span><span class="p">,</span> <span class="n">Dfun</span><span class="o">=</span><span class="n">jacobi</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                                    <span class="n">col_deriv</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">steps</span><span class="p">):</span>
+
+	<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;LMA&#39;</span><span class="p">:</span>
+	    <span class="n">fit_result</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">leastsq</span><span class="p">(</span><span class="n">residue</span><span class="p">,</span> <span class="n">ig</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+	    <span class="n">ig</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	    <span class="n">succ</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+	    <span class="n">fit_result</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residue_gen</span><span class="p">,</span> <span class="n">ig</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+	    <span class="n">ig</span> <span class="o">=</span> <span class="n">fit_result</span><span class="o">.</span><span class="n">x</span>
+	    <span class="n">succ</span> <span class="o">=</span> <span class="n">fit_result</span><span class="o">.</span><span class="n">success</span>
+
+        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot; Step </span><span class="si">%s</span><span class="s">: Residue = </span><span class="si">%f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">trunk_size</span><span class="p">,</span>
+                <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">residue</span><span class="p">(</span><span class="n">ig</span><span class="p">))</span>
+		<span class="p">)</span>
+        <span class="n">write_param</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">,</span> <span class="n">ig</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="k">if</span> <span class="n">succ</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">continue</span>
     <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Optimization finished...&quot;</span>
 
     <span class="c"># Post processing</span>
     <span class="c"># ---------------</span>
 
-    <span class="c"># Extract the relavant fields from the results.</span>
-    <span class="n">res_param</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">info_dict</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">mesg</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-    <span class="n">ier</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">mesg</span> <span class="o">=</span> <span class="n">fit_result</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;LMA&#39;</span> <span class="k">else</span> <span class="n">fit_result</span><span class="o">.</span><span class="n">message</span>
+    <span class="n">nfev</span> <span class="o">=</span> <span class="n">info_dict</span><span class="p">[</span><span class="s">&#39;nfev&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;LMA&#39;</span> <span class="k">else</span> <span class="n">fit_result</span><span class="o">.</span><span class="n">nfev</span>
+    <span class="n">res_param</span> <span class="o">=</span> <span class="n">ig</span>
 
-    <span class="c"># Convergence testing</span>
-    <span class="k">print</span> <span class="s">&quot; Number of function calls: </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">info_dict</span><span class="p">[</span><span class="s">&#39;nfev&#39;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">ier</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+    <span class="c"># Convergence information</span>
+    <span class="k">print</span> <span class="s">&quot; Number of function calls: </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">nfev</span>
+    <span class="k">if</span> <span class="n">succ</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&quot;Convergence achieved!&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&quot;Warning: Congences failed for the specified criteria!&quot;</span>
@@ -161,60 +321,66 @@
         <span class="k">continue</span>
     <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span>
 
-    <span class="c"># Write the fitted parameters</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">):</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">)</span>
-        <span class="k">continue</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">&quot; </span><span class="si">%5s</span><span class="s"> </span><span class="si">%5s</span><span class="s">  </span><span class="si">%25.10f</span><span class="s"> </span><span class="si">%25.10f</span><span class="s"> </span><span class="si">%25.10f</span><span class="s"> &quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span><span class="p">],</span> <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">res_param</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
-                <span class="p">)</span>
-        <span class="k">continue</span>
-    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="c"># write the resulted parameters</span>
+    <span class="n">write_param</span><span class="p">(</span><span class="n">morse_guess</span><span class="p">,</span> <span class="n">res_param</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="mi">0</span>
 </pre></div></div>
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">morsefit 0.1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
-      </ul>
-    </div>
-    <div class="footer">
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
         &copy; Copyright 2014, Tschijnmo TSCHAU.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
-    </div>
-  </body>
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

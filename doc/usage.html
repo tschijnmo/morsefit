@@ -1,131 +1,244 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Using the morsefit code &mdash; morsefit 0.1 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="morsefit 0.1 documentation" href="index.html" />
-    <link rel="next" title="Auxiliary scripts" href="aux_scripts.html" />
-    <link rel="prev" title="Welcome to morsefit’s documentation!" href="index.html" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="aux_scripts.html" title="Auxiliary scripts"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to morsefit’s documentation!"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">morsefit 0.1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using the morsefit code &mdash; morsefit 0.1 documentation</title>
+  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="morsefit 0.1 documentation" href="index.html"/>
+        <link rel="next" title="Auxiliary scripts" href="aux_scripts.html"/>
+        <link rel="prev" title="Welcome to morsefit’s documentation!" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> morsefit</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Using the morsefit code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aux_scripts.html">Auxiliary scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aux_scripts.html#readpes">readPES</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Automatic API documentation for development</a></li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">morsefit</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Using the morsefit code</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/usage.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
             
   <div class="section" id="using-the-morsefit-code">
 <h1>Using the morsefit code<a class="headerlink" href="#using-the-morsefit-code" title="Permalink to this headline">¶</a></h1>
 <p>The code can be invoked by the <tt class="docutils literal"><span class="pre">morsefit</span></tt> driver script. The configurations on
-which the fitting is based should be specified by the files whose names are
-given in the command line argument. One file for each configuration. The files
-have got a very simple format comprised of sections separated by blank lines.
-The first section gives the ab-initio energy, and an optional tag for the
-configuration can be given in the next line. Additional lines in the first
-section are going to be ignored. The following sections are going to be the
-Cartesian coordinates of the atoms in the molecules of the system. Only the
-interaction between molecules are going to be considered, with all the
-intra-molecular interactions ignored.</p>
-<p>The code also accepts optional arguments for the distance cut-off and the input
-file for the initial guesses of the Morse potentials. The cut-off defaults to
-<tt class="docutils literal"><span class="pre">None</span></tt>, which leads to no distance cut-off. And the default file name for the
-Morse potential parameter initial guess input is <tt class="docutils literal"><span class="pre">morse.inp</span></tt>. The file should
-consists of lines for the initial guesses for the Morse interaction between the
-atoms, with the first two fields being the atomic symbols for the interacting
-pairs and the remaining three fields being the <span class="math">\(D_e\)</span>, <span class="math">\(a\)</span>, and
-<span class="math">\(r_0\)</span> parameters for the Morse potential. All the interacting pairs in the
-configurations should be given here. And here the blank lines and lines starting
-with the hash sign are going to be skipped.</p>
+which the fitting is based should be specified by files whose names are given in
+the command line argument. One file for each configuration. The files have got a
+very simple format comprised of sections separated by blank lines.  The first
+section gives the ab-initio energy, and an optional tag for the configuration
+can be given in the next line. Additional lines in the first section are going
+to be ignored. The following sections are going to be the Cartesian coordinates
+of the atoms in the molecules of the system. Only the interaction between
+molecules are going to be considered, with all the intra-molecular interactions
+ignored. Most of the times the number of input files is going to be larger than
+what is manually manageable, so globbing by shell can be helpful here.</p>
+<p>The code also needs the initial guesses for all the Morse interactions in the
+system. And the default file name for the Morse potential parameter initial
+guess input is <tt class="docutils literal"><span class="pre">morse.inp</span></tt>, which can be changed by command line argument. The
+file should consists of lines for the initial guesses for the Morse interactions
+between the atoms, with the first two fields being the atomic symbols for the
+interacting pairs and the next three fields being the <span class="math">\(D_e\)</span>, <span class="math">\(a\)</span>,
+and <span class="math">\(r_0\)</span> parameters for the Morse potential. All the interacting pairs in
+the configurations should be given here. And here the blank lines and lines
+starting with the hash sign are going to be skipped. Optionally, the lower and
+upper bound for the parameters can be given for all the three parameters
+following the initial guesses. They can be given as <tt class="docutils literal"><span class="pre">None</span></tt> to indicate no
+bound. Note that some solvers does not support the usage of bounds.</p>
+<p>The code also accepts several optional arguments,</p>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-g</span>, <span class="option">--guess</span></kbd></td>
+<td>The file name for the initial guess file, default to
+<tt class="docutils literal"><span class="pre">morse.inp</span></tt>.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-m</span>, <span class="option">--method</span></kbd></td>
+<td>The optimization method, default to <tt class="docutils literal"><span class="pre">LMA</span></tt> for
+Levenberg-Marquardt algorithm. Besides this, all the methods in
+the <tt class="docutils literal"><span class="pre">scipy.optimize.minimize</span></tt> function are supported. Note
+that not all of the methods are able to handle bounds.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-j</span>, <span class="option">--no-jacobian</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Disable the computation of the analytic Jacobian. This can be
+tried when you are really desperate.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t</span>, <span class="option">--tolerance</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The stopping criterion for the minimization solvers.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-i</span>, <span class="option">--trunk-size</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The size of one trunk of optimization steps. The parameters are
+going to be printed for every trunk.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-s</span>, <span class="option">--steps</span></kbd></td>
+<td>The maximum number of trunks of steps.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--factor</span></kbd></td>
+<td>The scaling factor for the initial step of the
+Levenberg-Marquardt solver.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-d</span>, <span class="option">--diagonal</span></kbd></td>
+<td>The diag argument for the Levenberg-Marquardt solver, it can be
+a single number or a list of numbers for each of the
+parameters.</td></tr>
+</tbody>
+</table>
+<p>As an example,</p>
+<div class="highlight-python"><div class="highlight"><pre>morsefit -m TNC -t 1.0E-5 conf-*
+</pre></div>
+</div>
+<p>would start the optimization with the <tt class="docutils literal"><span class="pre">TNC</span></tt> solver to a tolerance of
+<span class="math">\(1.0\times10^{-5}\)</span> for the input files matching the glob pattern
+<tt class="docutils literal"><span class="pre">conf-*</span></tt>.</p>
 </div>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to morsefit&#8217;s documentation!</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="aux_scripts.html"
-                        title="next chapter">Auxiliary scripts</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/usage.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="aux_scripts.html" class="btn btn-neutral float-right" title="Auxiliary scripts"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to morsefit’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="aux_scripts.html" title="Auxiliary scripts"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to morsefit’s documentation!"
-             >previous</a> |</li>
-        <li><a href="index.html">morsefit 0.1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-    <div class="footer">
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
         &copy; Copyright 2014, Tschijnmo TSCHAU.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
-    </div>
-  </body>
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>
