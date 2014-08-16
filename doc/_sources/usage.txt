@@ -40,6 +40,7 @@ The code also accepts several optional arguments,
 -i, --trunk-size  The size of one trunk of optimization steps. The parameters are
                   going to be printed for every trunk.
 -s, --steps       The maximum number of trunks of steps.
+-c, --cutoff      The distance cut-off for the interactions.
 -f, --factor      The scaling factor for the initial step of the
                   Levenberg-Marquardt solver.
 -d, --diagonal    The diag argument for the Levenberg-Marquardt solver, it can be
