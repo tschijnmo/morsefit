@@ -181,7 +181,7 @@ def main():
 		)
         write_param(morse_guess, ig)
         print "\n"
-        if succ
+        if succ:
             break
         continue
     print "\nOptimization finished..."
@@ -191,6 +191,8 @@ def main():
 
     mesg = fit_result[3] if args.method == 'LMA' else fit_result.message
     nfev = info_dict['nfev'] if args.method == 'LMA' else fit_result.nfev
+    res_param = ig
+
     # Convergence information
     print " Number of function calls: %d" % nfev
     if succ:

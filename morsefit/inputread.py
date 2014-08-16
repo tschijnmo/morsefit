@@ -45,6 +45,7 @@ def read_morse_inp(inp_file):
             print i_line
             sys.exit(1)
 	try:
+            test_dummy = fields[10]
 	    bounds = tuple(eval(i) for i in fields[5:11])
 	    for i in bounds:
 		if not (isinstance(i, float) or i == None):
@@ -56,7 +57,7 @@ def read_morse_inp(inp_file):
 	    print i_line
 	    sys.exit(1)
 	except IndexError:
-	    bounds = [ None for i in xrange(0, 6) ]
+	    bounds = (None, ) * 6
 
         morse_params.append( (elem, init_guess, bounds) )
 
