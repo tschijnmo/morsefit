@@ -18,7 +18,7 @@ on the cclib library and should be able to support all the output format that
 is supported there. The options include:
 
 input_globs
-    A glob string whose expansion is able to give all the input files.
+    A glob_ string whose expansion is able to give all the input files.
 
 input_format
     The format of the input files, should be given in compatible with the
@@ -32,7 +32,7 @@ ref_energy
 output_pattern, output_repl
     The pattern to be matched against the input file names and the replacement
     to get the file name of the output file. It follows the conventions used in
-    the built-in ``re.subs`` function in the regular expression module of
+    the built-in ``re.subs`` function in the re_ regular expression module of
     python.
 
 tag_pattern, tag_repl
@@ -67,4 +67,7 @@ An example of the input file will be:
     }
 
 .. _cclib: http://cclib.github.io 
+.. _glob: http://en.wikipedia.org/wiki/Glob_%28programming%29
+.. _re: https://docs.python.org/2/library/re.html
+
 
