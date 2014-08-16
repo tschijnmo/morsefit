@@ -50,27 +50,27 @@ def main():
     # -------------------
 
     parser = argparse.ArgumentParser(description='Fit the Morse potential')
-    parser.add_argument('-c', '--cutoff', default=None, action='store',
-                        help='The distance cut-off, defalt to no cut-off')
     parser.add_argument('-g', '--guess', default='morse.inp', action='store',
                         help='The file for the Morse parameter guesses')
-    parser.add_argument('-s', '--steps', default=50, action='store',
-                        type=int, help='The max number of steps of trunks')
-    parser.add_argument('-i', '--trunk-size', default=1000, action='store',
-                        type=int, help='The size of one trunk of steps')
-    parser.add_argument('-f', '--factor', default=0.01, action='store',
-                        type=float, help='The scale factor for optimzation steps')
-    parser.add_argument('-d', '--diagonal', default=None, action='store',
-                        help='The diagonal scaling coefficient, can be a '
-                             'single positive number or a list')
-    parser.add_argument('-t', '--tolerance', default=1.0E-8, action='store',
-                        type=float, help='The tolerance for the solution.')
     parser.add_argument('-m', '--method', default='LMA', action='store',
 			help='The method for optimization, Levenberg-Marquardt by '
 			'default.' )
     parser.add_argument('-j', '--no-jacobian', default=False, 
                         action='store_true',
                         help='Do not use analytic Jacobian')
+    parser.add_argument('-t', '--tolerance', default=1.0E-8, action='store',
+                        type=float, help='The tolerance for the solution.')
+    parser.add_argument('-i', '--trunk-size', default=1000, action='store',
+                        type=int, help='The size of one trunk of steps')
+    parser.add_argument('-s', '--steps', default=50, action='store',
+                        type=int, help='The max number of steps of trunks')
+    parser.add_argument('-c', '--cutoff', default=None, action='store',
+                        help='The distance cut-off, defalt to no cut-off')
+    parser.add_argument('-f', '--factor', default=0.01, action='store',
+                        type=float, help='The scale factor for optimzation steps')
+    parser.add_argument('-d', '--diagonal', default=None, action='store',
+                        help='The diagonal scaling coefficient, can be a '
+                             'single positive number or a list')
     parser.add_argument('confs', nargs='+',
                         help='The configuration files')
     args = parser.parse_args()
