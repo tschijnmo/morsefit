@@ -49,6 +49,16 @@ first_molecule_natoms, last_molecule_natoms
     system is going to be divided into two molecules. These two options are
     mutually exclusive. At lease one should be specified.
 
+BSSE
+    When counterpoise correction is applied, this value can be set to a list of
+    integers giving the locations of the energies in the counterpoise
+    correction in the list of energies from the computation. The first element
+    gives the location for the energy of the complex. Then follows the
+    locations of the energies of the two moieties in full basis, which are then
+    followed by the locations of the energies of the corresponding moieties in
+    their own basis set. All the locations are zero-based. So for example, for
+    Gaussian results, this array can be set to ``[0, 1, 2, 3, 4]``.
+
 An example of the input file will be:
 ::
 

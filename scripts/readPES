@@ -49,17 +49,28 @@ def main():
         print 'ref_energy field is mandatory in the input!'
         sys.exit(1)
     # Energy should be in unit of eV
-    raw_energies = [ 0.0 for i in confs ]
+    raw_energies = []
     for idx, i_conf in enumerate(confs):
         if hasattr(i_conf, 'ccenergies'):
-            raw_energies[idx] = i_conf.ccenergies[-1]
+	    sp_energies = i_conf.ccenergies
         elif hasattr(i_conf, 'mpenergies'):
-            raw_energies[idx] = i_conf.mpenergies[-1][-1]
+	    sp_energies = i_conf.mpenergies[:, -1]
         elif hasattr(i_conf, 'scfenergies'):
-            raw_energies[idx] = i_conf.scfenergies[-1]
+	    sp_energies = i_conf.scfenergies
         else:
             print "Failed to load energies from the input file!"
             sys.exit(1)
+	if 'BSSE' in options:
+	    sp_locs = options['BSSE']
+	    ref_energy.append(
+		sp_energies[sp_locs[0]]
+		+ (sp_energies[sp_locs[3]] - sp_energies[sp_locs[1]])
+		+ (sp_energies[sp_locs[4]] - sp_energies[sp_locs[2]])
+		)
+	else:
+	    ref_energy.append(
+		sp_energies[-1]
+		)
         continue
     interaction_energies = [ i - ref_energy for i in raw_energies ]
 
