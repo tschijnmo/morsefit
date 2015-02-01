@@ -62,13 +62,17 @@ def main():
             sys.exit(1)
 	if 'BSSE' in options:
 	    sp_locs = options['BSSE']
-	    ref_energy.append(
-		sp_energies[sp_locs[0]]
-		+ (sp_energies[sp_locs[3]] - sp_energies[sp_locs[1]])
-		+ (sp_energies[sp_locs[4]] - sp_energies[sp_locs[2]])
-		)
+	    try:
+		raw_energies.append(
+		    sp_energies[sp_locs[0]]
+		    + (sp_energies[sp_locs[3]] - sp_energies[sp_locs[1]])
+		    + (sp_energies[sp_locs[4]] - sp_energies[sp_locs[2]])
+		    )
+	    except IndexError:
+		print 'Cannot get BSSE energies at data point %d' % idx
+		sys.exit(1)
 	else:
-	    ref_energy.append(
+	    raw_energies.append(
 		sp_energies[-1]
 		)
         continue
